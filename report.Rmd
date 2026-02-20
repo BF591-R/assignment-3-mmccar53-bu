@@ -233,5 +233,22 @@ this plot.
 ```{r boxplot from long format data using ggplot2, echo=FALSE}
 library(ggplot2)
 
+set.seed(123)  # reproducibility
 
+# Randomly sample 20 genes
+sampled_data <- long_format_data %>%
+  distinct(probe) %>%
+  slice_sample(n = 20) %>%
+  inner_join(long_format_data, by = "probe")
+
+# Boxplot with custom colors
+ggplot(sampled_data, aes(x = gene_set, y = expression, fill = gene_set)) +
+  geom_boxplot() +
+  scale_fill_manual(values = c("good" = "blue", "bad" = "red")) +
+  theme_bw() +
+  labs(
+    x = "Gene Set",
+    y = "Expression Value",
+    title = "Expression of Randomly Selected Genes"
+  )
 ```
